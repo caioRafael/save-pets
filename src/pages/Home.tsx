@@ -1,7 +1,15 @@
-import { Box, Button, Checkbox, IconButton, Input, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from "@chakra-ui/react";
+import { Box, Checkbox, IconButton, Input, Text } from "@chakra-ui/react";
 import { AddIcon } from '@chakra-ui/icons'
 import { FC, useCallback, useState } from "react";
 import Modal from './../components/Modal';
+import api from "../services/api";
+import { AxiosRequestConfig } from "axios";
+
+interface Animal {
+    specie: string,
+    ong: any,
+    user?: any
+}
 
 const Home:FC = () => {
     const [modal, setModal] = useState<boolean>(false)
@@ -9,14 +17,19 @@ const Home:FC = () => {
     const [species, setSpecies] = useState<string>()
     const [value, setValue] = useState<string>()
 
-    const sendAninal = useCallback(() => {
+    const sendAninal = useCallback(async () => {
         const data = {
-            species,
-            clinicalCase,
-            value
-        }
+            specie: species,
+            // clinicalCase,
+            // value
+            ong:{
+                id: 1
+            }
+        } as Animal
 
-        console.log(data)
+        const response = await api.post('/animals',data)
+
+        console.log(response.data)
 
         setModal(false)
     }, [clinicalCase, species, value, false])
