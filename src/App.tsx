@@ -1,11 +1,11 @@
-import { ChakraProvider, Text } from '@chakra-ui/react'
-import Login from './pages/Login'
+import { ChakraProvider } from '@chakra-ui/react'
+import Routes from './routes'
 
 function App() {
   return (
     <div className="App">
       <ChakraProvider>
-        <Login/>
+        <Routes/>
       </ChakraProvider>
     </div>
   )
