@@ -1,11 +1,11 @@
-import { Box, Checkbox, IconButton, Input, Text } from "@chakra-ui/react";
+import { Box, Checkbox, Grid, GridItem, IconButton, Input, Tag, Text } from "@chakra-ui/react";
 import { AddIcon } from '@chakra-ui/icons'
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import Modal from './../components/Modal';
 import api from "../services/api";
-import { AxiosRequestConfig } from "axios";
 
 interface Animal {
+    id?: number,
     specie: string,
     ong: any,
     user?: any
@@ -16,6 +16,8 @@ const Home:FC = () => {
     const [clinicalCase, setClinicalCase] = useState<boolean>(false)
     const [species, setSpecies] = useState<string>()
     const [value, setValue] = useState<string>()
+
+    const [animals, setAnimals] = useState<Animal[]>([])
 
     const sendAninal = useCallback(async () => {
         const data = {
@@ -33,11 +35,16 @@ const Home:FC = () => {
 
         setModal(false)
     }, [clinicalCase, species, value, false])
+
+    useEffect(()=>{
+        api.get('/animals').then(response => {
+            setAnimals(response.data)
+        })
+    },[modal])
     return(
         <Box
             w="100vw"
-            h="100vh"
-            background={"#f0f0f0"}
+            h="100vh"   
             display={"flex"}
             flexDirection={"column"}
 
@@ -58,11 +65,40 @@ const Home:FC = () => {
             </Box>
 
             <Box
-                h={"calc(100% - 60px)"}
+                h={"100%"}
                 w="100vw"
                 display={"flex"}
+                padding={10}
             >
-
+                <Grid 
+                    templateColumns='repeat(3, 1fr)' 
+                    gap={6} 
+                    w="100vw"
+                >
+                    {animals.map(animal => (
+                        <GridItem 
+                            key={animal.id} 
+                            w='100%' h='250' 
+                            bg='#C4C4C4'
+                            padding='20px'
+                            borderRadius={10}
+                        >
+                            <Text fontSize={"2xl"} fontWeight={"bold"}>{animal.specie}</Text>
+                            {!animal.user && (
+                                <Tag colorScheme={'teal'}>Disponivel para Adoção</Tag>
+                            )}
+                            <Box mt='5'>
+                                <Text>Ong: {animal.ong.nome}</Text>
+                                <Text>Contato:</Text>
+                                <Box ml='5'>
+                                    <Text>telefone: {animal.ong.phone}</Text>
+                                    <Text>Email: {animal.ong.email}</Text>
+                                    <Text>Endereço: {animal.ong.address}</Text>
+                                </Box>
+                            </Box>
+                        </GridItem>
+                    ))}
+                </Grid>
             </Box>
 
             {modal &&
