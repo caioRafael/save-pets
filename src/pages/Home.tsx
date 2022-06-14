@@ -3,6 +3,8 @@ import { AddIcon } from '@chakra-ui/icons'
 import { FC, useCallback, useEffect, useState } from "react";
 import Modal from './../components/Modal';
 import api from "../services/api";
+import { useAuth } from "../hooks/useAuth";
+import { Ong, User } from "../context/authContext";
 
 interface Animal {
     id?: number,
@@ -12,33 +14,34 @@ interface Animal {
 }
 
 const Home:FC = () => {
+    const { user } = useAuth()
+
+    
     const [modal, setModal] = useState<boolean>(false)
     const [clinicalCase, setClinicalCase] = useState<boolean>(false)
     const [species, setSpecies] = useState<string>()
     const [value, setValue] = useState<string>()
 
     const [animals, setAnimals] = useState<Animal[]>([])
+    
+    const logedUser = user as User | Ong
 
     const sendAninal = useCallback(async () => {
         const data = {
             specie: species,
-            // clinicalCase,
-            // value
             ong:{
-                id: 1
+                id: logedUser.id
             }
         } as Animal
 
         const response = await api.post('/animals',data)
 
-        console.log(response.data)
-
         setModal(false)
     }, [clinicalCase, species, value, false])
 
     useEffect(()=>{
-        api.get('/animals').then(response => {
-            setAnimals(response.data)
+        api.get('ongs/animals/5').then(response => {
+            setAnimals(response.data.reverse())
         })
     },[modal])
     return(
@@ -59,7 +62,9 @@ const Home:FC = () => {
                 padding={"30px"}
                 justifyContent={"space-between"}
             >
-                <Text fontSize={"3xl"} fontWeight={"bold"} color={"#fff"}>olá, caio</Text>
+                <Text fontSize={"3xl"} fontWeight={"bold"} color={"#fff"}>
+                    {logedUser.nome}
+                </Text>
                 
                 <IconButton aria-label='Add to friends' icon={<AddIcon />} onClick={()=>setModal(true)}/>
             </Box>
@@ -104,11 +109,11 @@ const Home:FC = () => {
             {modal &&
                 <Modal onClose={() => setModal(false)} isOpen={modal} textButton={"Criar"} title={"Cadastrar animal"} functionButton={sendAninal}>
                     <Input placeholder="Especie" marginBottom={4} value={species} onChange={(e) => {setSpecies(e.target.value)}}/>
-                    <Checkbox checked={clinicalCase} onChange={(e) => setClinicalCase(e.target.checked)} marginBottom={4}>Caso Clinico</Checkbox>
+                    {/* <Checkbox checked={clinicalCase} onChange={(e) => setClinicalCase(e.target.checked)} marginBottom={4}>Caso Clinico</Checkbox>
 
                     {clinicalCase && 
                         <Input placeholder="Valor necessário" marginBottom={4} value={value} onChange={(e) => {setValue(e.target.value)}}/>
-                    }
+                    } */}
                 </Modal>
             }
         </Box>
