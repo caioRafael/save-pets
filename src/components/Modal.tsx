@@ -11,7 +11,7 @@ export interface ModalPros{
     isLoading?: boolean
 }
 
-const Modal:FC<ModalPros> = (props) => {
+const Modal = (props: ModalPros) => {
     return(
         <ChakraModal onClose={props.onClose} isOpen={props.isOpen}>
             <ModalOverlay />

@@ -3,14 +3,13 @@ import { useBoolean } from "@chakra-ui/hooks";
 import { Input } from "@chakra-ui/input";
 import { Box } from "@chakra-ui/layout";
 import { FC, useCallback, useState } from "react";
+import { typeForm } from "../context/authContext";
 import api from "../services/api";
 import Modal, { ModalPros } from "./Modal";
 
 interface CreateUserModalProps extends ModalPros{}
 
-type typeForm = 'ong' | 'user'
-
-const CreateUserModal:FC<CreateUserModalProps> = (props) => {
+const CreateUserModal = (props: CreateUserModalProps) => {
     const [nome, setNome] = useState<string>("")
     const [email, setEmail] = useState<string>("")
     const [phone, setPhone] = useState<string>("")
@@ -25,16 +24,23 @@ const CreateUserModal:FC<CreateUserModalProps> = (props) => {
     const onSubmit = useCallback(async ()=>{
         setLoad.on()
         if(form === 'ong'){
-            const response = await api.post('ongs',{
+            await api.post('ongs',{
                 nome,
                 email,
                 phone,
                 password,
                 address
             })
+        }else{
+            const response = await api.post('users', {
+                nome,
+                email,
+                phone,
+                password,
+            })
             console.log(response.data)
-            setLoad.off()
         }
+        setLoad.off()
         props.onClose()
     },[nome, email, phone, form, password, address])
     return(

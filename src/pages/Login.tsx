@@ -3,18 +3,19 @@ import { Box, Button, Input, Stack, Text, Link, useBoolean } from "@chakra-ui/re
 import { useHistory } from "react-router-dom"
 import { useAuth } from "../hooks/useAuth"
 import CreateUserModal from "../components/CreateUserModal"
+import { typeForm } from "../context/authContext"
 
-const Login:FC = () => {
-    const { signIn } = useAuth()
+const Login = () => {
+    const { signIn, load } = useAuth()
     const history = useHistory()
     const [modal, setModal] = useBoolean(false)
 
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
+    const [form, setForm] = useState<typeForm>('user')
 
     const goToHome = useCallback(async () => {
-        // history.push('/home')
-        await signIn(email, password)
+        await signIn(email, password, form)
     }, [email, password])
     return (
         <Box
@@ -43,7 +44,7 @@ const Login:FC = () => {
                 <Box
                     background={"#f2f2f2"} 
                     w="90%" 
-                    h="400px" 
+                    h="500px" 
                     borderRadius={10}
                     padding={20}
                     display={"flex"} 
@@ -52,6 +53,19 @@ const Login:FC = () => {
                 >
                     <Text fontSize={"4xl"} fontWeight={"bold"}>Login</Text>
                     <Stack marginTop={30} w="85%">
+                    <Box>
+                        <Button 
+                            onClick={()=>setForm("user")} 
+                            colorScheme={ form==='user' ? 'blue' : 'gray' }
+                            borderRadius={1}
+                            marginRight={1}
+                        >Usuário</Button>
+                        <Button 
+                            onClick={()=>setForm("ong")} 
+                            colorScheme={ form==='ong' ? 'blue' : 'gray' }
+                            borderRadius={1}
+                        >Ong</Button>
+                    </Box>
                         <Input 
                             placeholder="E-mail" 
                             type={"email"} 
@@ -66,7 +80,7 @@ const Login:FC = () => {
                             value={password}
                             onChange={(e) => {setPassword(e.target.value)}}
                         />
-                        <Button colorScheme='teal' size='lg' onClick={goToHome}>
+                        <Button colorScheme='teal' size='lg' onClick={goToHome} isLoading={load}>
                             Login
                         </Button>
                         <Link

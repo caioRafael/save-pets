@@ -1,21 +1,23 @@
-import { Box, Checkbox, Grid, GridItem, IconButton, Input, Tag, Text } from "@chakra-ui/react";
+import { Box, Grid, IconButton, Input, Text } from "@chakra-ui/react";
 import { AddIcon } from '@chakra-ui/icons'
-import { FC, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Modal from './../components/Modal';
 import api from "../services/api";
 import { useAuth } from "../hooks/useAuth";
 import { Ong, User } from "../context/authContext";
+import {FiLogOut} from 'react-icons/fi'
+import CardAnimal from "../components/CardAnimal";
 
-interface Animal {
+// FiLogOut
+export interface Animal {
     id?: number,
     specie: string,
-    ong: any,
-    user?: any
+    ong: Ong,
+    user?: User
 }
 
-const Home:FC = () => {
-    const { user } = useAuth()
-
+const Home = () => {
+    const { user, signOut, typeUser } = useAuth()
     
     const [modal, setModal] = useState<boolean>(false)
     const [clinicalCase, setClinicalCase] = useState<boolean>(false)
@@ -26,6 +28,10 @@ const Home:FC = () => {
     
     const logedUser = user as User | Ong
 
+    const isOng:boolean = useMemo(() => {
+        return typeUser === 'ong' ? true : false
+    }, [])
+
     const sendAninal = useCallback(async () => {
         const data = {
             specie: species,
@@ -34,16 +40,21 @@ const Home:FC = () => {
             }
         } as Animal
 
-        const response = await api.post('/animals',data)
+        try {
+            await api.post('/animals',data)
+        } catch (error) {
+            alert(error)
+        }
 
         setModal(false)
     }, [clinicalCase, species, value, false])
 
     useEffect(()=>{
-        api.get('ongs/animals/5').then(response => {
+        api.get('animals').then(response => {
             setAnimals(response.data.reverse())
         })
     },[modal])
+
     return(
         <Box
             w="100vw"
@@ -66,7 +77,12 @@ const Home:FC = () => {
                     {logedUser.nome}
                 </Text>
                 
-                <IconButton aria-label='Add to friends' icon={<AddIcon />} onClick={()=>setModal(true)}/>
+                <Box>
+                    {isOng && 
+                        <IconButton aria-label='Add to friends' icon={<AddIcon />} onClick={()=>setModal(true)} marginRight={2}/>
+                    }
+                    <IconButton aria-label='Add to friends' icon={<FiLogOut/>} onClick={signOut}/>
+                </Box>
             </Box>
 
             <Box
@@ -81,27 +97,7 @@ const Home:FC = () => {
                     w="100vw"
                 >
                     {animals.map(animal => (
-                        <GridItem 
-                            key={animal.id} 
-                            w='100%' h='250' 
-                            bg='#C4C4C4'
-                            padding='20px'
-                            borderRadius={10}
-                        >
-                            <Text fontSize={"2xl"} fontWeight={"bold"}>{animal.specie}</Text>
-                            {!animal.user && (
-                                <Tag colorScheme={'teal'}>Disponivel para Adoção</Tag>
-                            )}
-                            <Box mt='5'>
-                                <Text>Ong: {animal.ong.nome}</Text>
-                                <Text>Contato:</Text>
-                                <Box ml='5'>
-                                    <Text>telefone: {animal.ong.phone}</Text>
-                                    <Text>Email: {animal.ong.email}</Text>
-                                    <Text>Endereço: {animal.ong.address}</Text>
-                                </Box>
-                            </Box>
-                        </GridItem>
+                        <CardAnimal animal={animal}/>
                     ))}
                 </Grid>
             </Box>
@@ -109,11 +105,6 @@ const Home:FC = () => {
             {modal &&
                 <Modal onClose={() => setModal(false)} isOpen={modal} textButton={"Criar"} title={"Cadastrar animal"} functionButton={sendAninal}>
                     <Input placeholder="Especie" marginBottom={4} value={species} onChange={(e) => {setSpecies(e.target.value)}}/>
-                    {/* <Checkbox checked={clinicalCase} onChange={(e) => setClinicalCase(e.target.checked)} marginBottom={4}>Caso Clinico</Checkbox>
-
-                    {clinicalCase && 
-                        <Input placeholder="Valor necessário" marginBottom={4} value={value} onChange={(e) => {setValue(e.target.value)}}/>
-                    } */}
                 </Modal>
             }
         </Box>
