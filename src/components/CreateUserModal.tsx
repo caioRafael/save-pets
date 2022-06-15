@@ -38,7 +38,6 @@ const CreateUserModal = (props: CreateUserModalProps) => {
                 phone,
                 password,
             })
-            console.log(response.data)
         }
         setLoad.off()
         props.onClose()
@@ -74,7 +73,7 @@ const CreateUserModal = (props: CreateUserModalProps) => {
                         type={"text"} 
                         borderColor={"#00B393"}
                         value={nome}
-                        onChange={(e) => {setNome(e.target.value)}}
+                        onChange={(e: any) => {setNome(e.target.value)}}
                         marginTop={1}
                     />
 
@@ -83,7 +82,7 @@ const CreateUserModal = (props: CreateUserModalProps) => {
                         type={"email"} 
                         borderColor={"#00B393"}
                         value={email}
-                        onChange={(e) => {setEmail(e.target.value)}}
+                        onChange={(e: any) => {setEmail(e.target.value)}}
                         marginTop={1}
                     />
 
@@ -92,7 +91,7 @@ const CreateUserModal = (props: CreateUserModalProps) => {
                         type={"text"} 
                         borderColor={"#00B393"}
                         value={phone}
-                        onChange={(e) => {setPhone(e.target.value)}}
+                        onChange={(e: any) => {setPhone(e.target.value)}}
                         marginTop={1}
                     />
 
@@ -101,7 +100,7 @@ const CreateUserModal = (props: CreateUserModalProps) => {
                         type={"password"} 
                         borderColor={"#00B393"}
                         value={password}
-                        onChange={(e) => {setPassword(e.target.value)}}
+                        onChange={(e: any) => {setPassword(e.target.value)}}
                         marginTop={1}
                     />
                 </Box>
@@ -114,7 +113,7 @@ const CreateUserModal = (props: CreateUserModalProps) => {
                         type={"text"} 
                         borderColor={"#00B393"}
                         value={nome}
-                        onChange={(e) => {setNome(e.target.value)}}
+                        onChange={(e: any) => {setNome(e.target.value)}}
                         marginTop={1}
                     />
 
@@ -123,7 +122,7 @@ const CreateUserModal = (props: CreateUserModalProps) => {
                         type={"email"} 
                         borderColor={"#00B393"}
                         value={email}
-                        onChange={(e) => {setEmail(e.target.value)}}
+                        onChange={(e: any) => {setEmail(e.target.value)}}
                         marginTop={1}
                     />
 
@@ -132,7 +131,7 @@ const CreateUserModal = (props: CreateUserModalProps) => {
                         type={"text"} 
                         borderColor={"#00B393"}
                         value={phone}
-                        onChange={(e) => {setPhone(e.target.value)}}
+                        onChange={(e: any) => {setPhone(e.target.value)}}
                         marginTop={1}
                     />
 
@@ -141,7 +140,7 @@ const CreateUserModal = (props: CreateUserModalProps) => {
                         type={"password"} 
                         borderColor={"#00B393"}
                         value={password}
-                        onChange={(e) => {setPassword(e.target.value)}}
+                        onChange={(e: any) => {setPassword(e.target.value)}}
                         marginTop={1}
                     />
 
@@ -150,7 +149,7 @@ const CreateUserModal = (props: CreateUserModalProps) => {
                         type={"text"} 
                         borderColor={"#00B393"}
                         value={address}
-                        onChange={(e) => {setAddress(e.target.value)}}
+                        onChange={(e: any) => {setAddress(e.target.value)}}
                         marginTop={1}
                     />
                 </Box>

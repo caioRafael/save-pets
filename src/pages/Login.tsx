@@ -71,14 +71,14 @@ const Login = () => {
                             type={"email"} 
                             borderColor={"#00B393"}
                             value={email}
-                            onChange={(e) => {setEmail(e.target.value)}}
+                            onChange={(e: any) => {setEmail(e.target.value)}}
                         />
                         <Input 
                             placeholder="Senha" 
                             type={"password"} 
                             borderColor={"#00B393"}
                             value={password}
-                            onChange={(e) => {setPassword(e.target.value)}}
+                            onChange={(e: any) => {setPassword(e.target.value)}}
                         />
                         <Button colorScheme='teal' size='lg' onClick={goToHome} isLoading={load}>
                             Login

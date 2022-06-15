@@ -1,5 +1,6 @@
 import { useBoolean } from "@chakra-ui/hooks";
 import { createContext, ReactNode, useCallback, useEffect, useState } from "react";
+import { Animal } from "../pages/Home";
 import api from "../services/api";
 
 export interface User {
@@ -20,6 +21,14 @@ export interface Ong {
 export interface Login{
     email: string,
     password: string
+}
+
+export interface ClinicalCase{
+    id?: number,
+    targetValue: number,
+    amountCollected: number,
+    animal: Animal,
+    ong: Ong
 }
 
 export type typeForm = 'ong' | 'user' | null

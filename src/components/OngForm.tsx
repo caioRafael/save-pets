@@ -2,7 +2,6 @@ import { FormControl } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { FC, useState } from "react";
 
-on
 
 const OngForm:FC = () => {
     const [name, setName] = useState<string>("")
@@ -15,7 +14,7 @@ const OngForm:FC = () => {
                 type={"text"} 
                 borderColor={"#00B393"}
                 value={name}
-                onChange={(e) => {setName(e.target.value)}}
+                onChange={(e: any) => {setName(e.target.value)}}
             />
 
 
